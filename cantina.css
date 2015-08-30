@@ -1,0 +1,8 @@
+.bill-font {
+	font-family: monospace;
+}
+
+/* Applique un padding en haut des cellules appartenant à des lignes ayant la classe meal-item */
+tr.meal-item > td {
+	padding-top: .3em;
+}
