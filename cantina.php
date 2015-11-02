@@ -28,11 +28,22 @@
 		<!-- Initialisation de la page -->
 		<script lang="javascript">
 			$(document).ready(function(){		
-				// Au chargement de la page, on lit le solde actuel
-				if (localStorageAvailable) {
-					$("#txt-current-balance").val(localStorage.getItem("balance"));
-				}
-				$("#txt-current-balance").disabled = !localStorageAvailable;
+				// Au chargement de la page, on lit les paramètres
+				loadParameters();
+				
+				// Bouton de sauvegarde des paramètres
+				$("#btn-save-parameters").click(function(){
+					saveParameters();
+					activateParametersSave();
+				});
+				
+				// Champs de saisie des paramètres
+				$(".parameter-input").on(
+					"change keyup input paste",
+					function() {
+						activateParametersSave();
+					}
+				);
 				
 				// Boutons de saisie du prix
 				for (var price = 0; price < 10; price ++) {
