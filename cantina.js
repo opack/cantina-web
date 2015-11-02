@@ -292,4 +292,74 @@ function updateDisabledStates() {
 	} else {
 		$("#btn-pay").removeAttr("disabled");
 	}
+	
+	// Si un des paramètres a changé, on permet la sauvegarde
+	activateParametersSave();
+}
+
+/**
+* Active le bouton de sauvegarde de paramètres si un des champs de
+* saisie a une valeur différente de celle stockée
+*/
+function activateParametersSave() {
+	if (hasChangedFromStorage("balance", "#txt-current-balance")
+	|| hasChangedFromStorage("admission", "#txt-admission")
+	|| hasChangedFromStorage("max-grant", "#txt-max-grant")
+	|| hasChangedFromStorage("bill-min", "#txt-bill-min")) {
+		$("#btn-save-parameters").removeAttr("disabled");
+	} else {
+		$("#btn-save-parameters").attr("disabled", "disabled");
+	}
+}
+
+/**
+* Charge les paramètres depuis le stockage local et met à jour les champs
+*/
+function loadParameters() {
+	if (localStorageAvailable) {
+		loadFromStorage("balance", "#txt-current-balance");
+		loadFromStorage("admission", "#txt-admission");
+		loadFromStorage("max-grant", "#txt-max-grant");
+		loadFromStorage("bill-min", "#txt-bill-min");
+	}
+	$("#txt-current-balance").disabled = !localStorageAvailable;
+	$("#txt-admission").disabled = !localStorageAvailable;
+	$("#txt-max-grant").disabled = !localStorageAvailable;
+	$("#txt-bill-min").disabled = !localStorageAvailable;
+}
+
+/**
+* Sauvegarde les paramètres depuis les champs vers le stockage local
+*/
+function saveParameters() {
+	if (localStorageAvailable) {
+		saveToStorage("balance", "#txt-current-balance");
+		saveToStorage("admission", "#txt-admission");
+		saveToStorage("max-grant", "#txt-max-grant");
+		saveToStorage("bill-min", "#txt-bill-min");
+	}
+}
+
+/**
+* Charge depuis le stockage local la valeur ayant la clé indiquée
+* et la place dans le champ input correspondant au sélecteur indiqué
+*/
+function loadFromStorage(storageKey, inputSelector) {
+	$(inputSelector).val(localStorage.getItem(storageKey));
+}
+
+/**
+* Lit la valeur de l'input indiqué puis l'enregistre dans le stockage
+* local
+*/
+function saveToStorage(storageKey, inputSelector) {
+	localStorage.setItem(storageKey, $(inputSelector).val());
+}
+
+/**
+* Indique si la valeur dans le stockage local est différent de celle
+* de l'input
+*/
+function hasChangedFromStorage(storageKey, inputSelector) {
+	return localStorage.getItem(storageKey) != $(inputSelector).val();
 }
